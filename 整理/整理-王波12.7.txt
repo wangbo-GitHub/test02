@@ -1,0 +1,529 @@
+window.onload = function test() {
+        var arr2=[{name: '1', age: 13}, {name: '2', age: 13}];
+		var arr1=[{name: '1', age: 12}, {name: '2', age: 11}, {name: '3', age: 133}];
+        var resultArr = [];
+        arr2.forEach(item =>{
+            resultArr.push( arr1.filter(items => items.name === item.name)[0] );
+        })
+        console.log(resultArr)
+    }
+
+v-show里面带入click事件要加上 el-input
+slot里面不能使用v-show
+11.24
+Object.keys();获取对象或则数字的key。方便对key处理
+Object.defineProperty(obj, name,des),对象上生成一个属性，或则对原属性进行修改,并返回这个对象
+obj:操作的对象
+name: 属性名称
+des: writable,enumerable,  
+get()； 属性被访问，自动调用
+set();  属性被赋值，自动调用
+例子
+var obj={};
+Object.defineProperty(obj, name, {
+	set: (val)=> {
+		console.log('赋值'+val);
+	},
+	get: ()=> {
+		console.log('取值');
+		return 'wangbo'
+	},
+});
+var Book = {}
+var name = '';
+Object.defineProperty(Book, 'name', {
+  set: function (value) {
+    name = value;
+    console.log('你取了一个书名叫做' + value);
+  },
+  get: function () {
+    return '《' + name + '》'
+  }
+})
+ 
+ 
+Book.name = 'vue权威指南';  // 你取了一个书名叫做vue权威指南
+console.log(Book.name);  // 《vue权威指南》
+Vue基于此实现双向绑定，达到响应式目的【发布者订阅者模式】，利用其数据劫持，获取各个属性的getter setter数据变动时发布消息给订阅者，触发相应的监听回调
+let data = {
+  name: '123',
+  age: {age: 123}
+};
+let handler = {
+  get: function(obj, key) {
+    return Reflect.get(obj, key);
+  },
+  set: function(obj, key, value) {
+    return Reflect.set(obj, key, value);
+  }
+};
+let xy = new Proxy(data, handler);
+1. 数据劫持--监听所有属性--监听者 Observer     Dep
+2. 观察者Watcher 视图的更新
+3. Compile
+获取文档中 id="demo" 的元素： document.querySelector("#demo");
+键盘事件
+onkeydown 用户按下任何键盘键时触发 （value可能不存在）
+onkeyup 用户松开任何之前的键   （val已存在）
+onkeypress 用户松开任何之前的字母或则数字键触发
+var a = {};
+    var arr = [];
+    Object.defineProperty(a, 'name', {
+      set: (val)=> {
+        arr['name'] = val;
+      },
+      get: () => {
+        return arr['name'];
+      }
+    });
+    var de1 = document.querySelector('#input1');
+    var de2 = document.querySelector('#input2');
+    de1.onkeyup = ()=> {
+      a.name = de1.value;
+      de2.value = arr['name'];
+    };
+Proxy();
+
+JS
+所有的数组实例均会从Array.prototype继承属性和方法
+Array.prototype.constructor();
+Function.prototype.constructor();
+apply与call
+Object.__proto__
+//给定一个字符串S，检查是否能重新排布其中的字母，使得两相邻的字符不同
+var reorganizeString = function(S) {
+     const len=S.length;
+    if(len===0) return ""
+    //用于存放字符及其数量
+    let hashArr = new Array(26).fill(0);//new Array(10).fill(1);
+    for(let i=0;i<S.length;i++){
+        let item = hashArr[S[i].charCodeAt()-97];//一一匹配
+        if(item){
+            item.count++;
+        }else{
+            hashArr[S[i].charCodeAt()-97] = {name:S[i],count:1}
+        }
+    }
+    hashArr = hashArr.filter((v)=>v!=0); //，过滤，把没出现的数字去掉，减少后面遍历次数
+    hashArr.sort((a,b)=>(b.count-a.count)); //按count大小降序排列
+    if(hashArr[0].count>Math.ceil(S.length/2)){
+        //这里是无法构造的情况
+        return ""
+    }else{
+        //这里是可以构造的
+        let res=new Array(hashArr[0].count).fill(hashArr[0].name)//[a,a,a] aaabc
+        // let cur = 1;//表示hashArr的索引
+        let i = 1;//aaabb
+        //开始构造输出的数据，隔一个插入一个
+        for(let cur=1;cur<hashArr.length;){
+            res.splice(i,0,hashArr[cur].name); //[a,b,a,a] [a,b,a,c,a]
+            hashArr[cur].count--;
+            if(hashArr[cur].count===0){ //开始第二个
+                cur++;
+            }
+            //隔一个插入
+            i=i+2 //
+        }
+         return res.join('');
+    }  
+};
+
+// 输入：(2 -> 4 -> 3) + (5 -> 6 -> 4)
+// 输出：7 -> 0 -> 8
+// 原因：342 + 465 = 807
+var addTwoNumbers = function(l1, l2) {
+  let add = 0;
+  let sum = new ListNode('0');
+  let head = sum;
+  while(add || l1 || l2) {
+    let val1 = l1 !== null ? l1.val : 0;
+    let val2 = l2 !== null ? l2.val : 0;
+    let sums = val1 + val2 + add;
+    add = sums > 10 ? 1: 0;
+    sum.next = new ListNode(sums %10)
+    sum = sum.next;
+    if (l1) l1 = l1.next 
+    if (l2) l2 = l2.next 
+  }
+  return head.next;
+}
+12.1
+1. 3000N一个缺陷
+2. https切http的代码验证
+3. 熟悉访客模块
+Failed to sign in. Please open the output channel for details
+
+
+回过头来看，这里的渲染逻辑并不是特别复杂，核心关键的几步流程还是非常清晰的：
+
+new Vue，执行初始化
+挂载$mount方法，通过自定义Render方法、template、el等生成Render函数
+通过Watcher监听数据的变化
+当数据发生变化时，Render函数执行生成VNode对象
+通过patch方法，对比新旧VNode对象，通过DOM Diff算法，添加、修改、删除真正的DOM元素
+
+
+其主要逻辑为当VNode为真实元素或旧的VNode和新的VNode完全相同时，直接调用createElm方法生成真实的DOM树，当VNode新旧存在差异时，
+则调用patchVnode方法，通过比较新旧VNode节点，
+根据不同的状态对DOM做合理的添加、删除、修改DOM（这里的Diff算法有兴趣的读者可以自行阅读patchVnode方法，鉴于篇幅不再赘述），再调用createElm生成真实的DOM树。
+
+链表【单向与双向】
+let Node = (element) => {
+      this.element = element;
+      this.next = null; //指针 节点值与指针
+      this.prev = null;
+      let previous = this.getElementAt(position - 1);
+      node.next = previous.next;
+      previous.next = node;
+      //删除的时候 A => B => C
+      let current = this.head;
+      revious.next = revious.next.next;
+      current = current.next;//只支持单向的
+    }
+12.7 
+Node 设计模式中的观察者模式
+事件loop循环
+node leetcode 设计模式以及js github websocket
+12.9
+随着前端模块化的实现，代码在经过自动化工具打包后都会被压缩混淆，当代码混淆后，在浏览器调试时是如何定位到源文件代码的呢？
+
+这时 sourceMap 就应运而生，sourceMap 是有 Google 提出并在 chrome 上实现，采用Base64 VLQ编码，能根据特定的规则匹配到源文件的代码位置2、服务器下发选中的关联关系
+
+//vue2.0-node-react-vue3借助视频，其他浏览知识以及面试题目leecode
+
+is动态切换组件以及消除某些限制table里面输入组件，渲染到外面问题
+
+高阶函数，函数作为参数传递，注册监听函数
+function f1(callback) {
+	let a;
+	callback(a)
+}
+var f2 = function() {
+	console.log('123123');
+}
+f1(f2);
+
+响应式原则
+v-for 中的key 唯一性 更新DOM， 虚拟DOM diff算法，自动识别相同的key
+可以这样简单地理解，无：key属性时，状态默认绑定的是位置；有：key属性时，状态根据key的属性值绑定到了相应的数组元素。
+
+ABC
+ABC
+ACB
+fiddler node自动化工具
+
+const VueTem = require('vue-template-compiler');
+VueTem.compile(`<div>123</div>`);
+
+
+    const throttle = (hanldler, delay) => {
+      let pre = Date.now();
+      return () => {
+        let now = Date.now();
+        if (now - pre >= delay) {
+          hanldler();
+          pre = Date.now();
+        }
+      };
+    };
+    const hanldlers = () => {
+      console.log('123');
+    };
+    window.addEventListener('resize', throttle(hanldlers, 2000), true); //默认事件为冒泡 true为捕获
+    window.addEventListener('scroll', throttle(hanldlers, 2000), true);
+    const debounce = (hanldlers, delay)=> {
+      let times = null;
+      return () => {
+        if(times) {
+          clearTimeout(times);
+        }
+        times = setTimeout(hanldlers, delay);
+      }
+    };
+    debounce(hanldlers, 1000);
+    //节流就是在规定的时间内执行方法
+    //防抖就是在n秒内只会执行一次，如果n秒以内就再次触发，则重新计算时间
+    //防抖就是在n秒内只会执行一次，如果n秒以内就再次触发，则重新计算时间
+
+
+//监听者来监听数据变化
+function observer(data) {
+  if (!data || typeof data === 'object') {
+    return false;
+  }
+  Object.keys(data).forEach(key => {
+    defs(data, key, data[key]);
+  });
+}
+function defs (data, key, value) {
+  observer(data);
+  let deep = new Deep();
+  Object.definedProperity(data, key, {
+    get: function() {
+      Deep.target ? deep.addSub(Deep.target) : '';
+      return value;
+    },
+    set(newValue) {
+      if (newValue === value) {
+        value = newValue;
+        deep.notify();
+      }
+    }
+  });
+}
+//dep订阅容器
+function Deep() {
+  this.subs = [];
+}
+Deep.prototype = {
+  addSub: function(sub) { //sub为订阅者
+    this.subs.push(sub);
+  },
+  notify: function() {
+    this.subs.forEach(sub => {
+      sub.update();
+    });
+  }
+};
+
+//订阅者watcher
+class Watcher {
+  constructor(vm, el, cd) { //cd为输入框赋值方法
+    this.vm = vm;
+    this.el = el;
+    this.cd = cd;
+	this.value = this.get();  // 将自己添加到订阅器的操作
+  }
+  get() {
+    Deep.target = this; //js 是单线程的，所以我们就可以在每一个观察者获取旧值的时候，给这个观察者添加一个 target 属性，这个属性就指向它这个观察者本身。之后就把这个 target 清除。
+    let value = '123';
+    Deep.target = null;
+    return value;
+  }
+  update() {
+    let news = '1123';
+    this.cd(news);
+  }
+}
+let re = new Watcher();
+//给一个输入框new一个watcher即可
+const solveSudoku = (board) => {
+  const hasConflit = (r, c, val) => {  // 判断是否有行列和框框的冲突
+    for (let i = 0; i < 9; i++) {
+      if (board[i][c] == val || board[r][i] == val) { // 行或列里有冲突
+        return true;
+      }
+    }
+    const subRowStart = Math.floor(r / 3) * 3; // 对于小框，行有三种起始索引 0、3、6
+    const subColStart = Math.floor(c / 3) * 3; // 对于小框，列有三种起始索引 0、3、6
+    for (let i = 0; i < 3; i++) {              // 遍历所在的小框
+      for (let j = 0; j < 3; j++) {
+        if (val == board[subRowStart + i][subColStart + j]) { // 发现了重复数
+          return true;
+        }
+      }
+    }
+    return false; // 没有发生冲突
+  };
+
+  const fill = (i, j) => {
+    if (j == 9) {            // 列越界，填完一行，填下一行
+      i++;
+      j = 0;
+      if (i == 9) return true; // 都填完了，返回true
+    }
+    if (board[i][j] != ".") return fill(i, j + 1); // 不是空白格，递归填下一格
+
+    for (let num = 1; num <= 9; num++) {           // 枚举出当前格的所有可填的选择
+      if (hasConflit(i, j, String(num))) continue; // 如果存在冲突，跳过这个选择
+      board[i][j] = String(num);                   // 作出一个选择
+      if (fill(i, j + 1)) return true; // 如果基于它，填下一格，最后可以解出数独，直接返回true
+      board[i][j] = ".";               // 如果基于它，填下一格，填1-9都不行，回溯，恢复为空白格
+    }
+    return false; // 尝试了1-9，每个都往下递归，都不能做完，返回false
+  };
+
+  fill(0, 0); // 从第一个格子开始填
+  return board;
+};
+
+this.$forceUpdate();强制调用render渲染函数，渲染数据
+
+事件循环机制：
+JS引擎线程会维护一个执行栈，同步代码会依次加入到执行栈中依次执行并出栈。
+
+JS引擎线程遇到异步函数，会将异步函数交给相应的Webapi，而继续执行后面的任务。
+
+Webapi会在条件满足的时候，将异步对应的回调加入到消息队列中，等待执行。
+
+执行栈为空时，JS引擎线程会去取消息队列中的回调函数（如果有的话），并加入到执行栈中执行。
+
+完成后出栈，执行栈再次为空，重复上面的操作，这就是事件循环(event loop)机制。
+
+
+
+
+ue路由切换时，会先加载新的组件，等新的组件渲染好但是还没有挂载前，销毁旧的组件，之后挂载新组件，如下图所示：
+新组件beforeCreate
+        ↓
+新组件created
+        ↓
+新组件beforeMount
+        ↓
+旧组件beforeDestroy
+        ↓
+旧组件destroyed
+        ↓
+新组件mounted
+注意，在$emit时，必须已经$on，否则将无法监听到事件。
+所以正确的写法应该是在需要接收值的组件的created生命周期函数里写$on，在需要往外传值的组件的destroyed生命周期函数函数里写：
+
+destroyed(){
+  eventBus.$emit('dataUpdate',data)
+}
+
+AOP(面相切面编程)： 主要作用是把一些跟核心业务逻辑模块无关的功能抽离出来。
+例如：日志统计，异常处理等。把这些功能抽离出来后，通过"动态植入"的方法，掺入到业务逻辑模块中。这样做的好处是保证业务逻辑模块的纯净和高内聚，其次可以方便的复用日志统计等功能模块
+
+
+function say(who) {
+    console.log(who + 'hello');
+}
+
+Function.prototype.before = function(beforeFunc) {
+        // this  箭头函数中没有this  也没有arguments
+        return (...args) => { // ['我']
+            beforeFunc();
+            this(...args);
+        }
+    }
+    // beforeSay 是一个包装后的函数
+
+let beforeSay = say.before(() => {
+    console.log('开始说话')
+})
+
+beforeSay('我');
+
+//开始说话
+//我
+
+
+// 判断数据类型
+// typeof instanceof contructor Object.prototype.toString.call 
+
+function isType(type){ // 变量
+    return function(content){
+        return Object.prototype.toString.call(content) === "[object "+type+"]";
+    }
+}   
+// isString isArray isBoolean
+let types = ['String','Boolean','Number','Null','Undefined'];
+let utils = {}; // 工具库
+for(let i = 0 ; i< types.length;i++){
+    let type = types[i]
+    utils['is'+type] = isType(type);
+    // utils.isString = function 预制参数 和 bind一样
+}
+let flag = utils.isString('hello');
+console.log(flag);
+
+函数柯里化：多个参数的传入，把他转化成 n个函数，可以暂存变量(主要用于缓存，将参数缓存到代码中，在返回一个新的函数直到参数都传递完成后调用最后的函数)
+一般柯里化参数的要求都是一个个的传 ==》多个参数传入就是偏函数
+实现通用的函数柯里化
+function curring(fn){
+  const inner = (args=[])=>{
+    return args.length >= fn.length ? fn(...args) : (...userArgs)=> inner([...args,...userArgs])
+  }
+  return inner()
+}``
+
+for(let i = 0; i < n; i++){
+    t.push(0);
+}
+for(let i = 0; i < n; i++){
+    temp.push([...t]);//注意不能直接temp.push(t),直接赋值的话为浅拷贝，新数组只是原对象的一个引用
+}
+2、判断当前位置能否摆放
+主要是在斜线上的判断，需要沿四个方向扩展出去。
+
+//判断能否摆放
+var judge = function(i,j,n){
+    //横
+    for(let k = 0;k < n; k++){
+        if(temp[i][k] == 1) return 0;
+    }
+    //竖
+    for(let k = 0;k < n; k++){
+        if(temp[k][j] == 1) return 0;
+    }
+    //斜
+    for(let k = 1; k + j < n && i - k >= 0; k++){
+        if(temp[i - k][j + k] == 1) return 0;
+    }
+    for(let k = 1; k + i < n && j - k >= 0; k++){
+        if(temp[i + k][j - k] == 1) return 0;
+    }
+    for(let k = 1; k + i < n && j + k < n; k++){
+        if(temp[i + k][j + k] == 1) return 0;
+    }
+    for(let k = 1; i - k >= 0 && j - k >= 0; k++){
+        if(temp[i - k][j - k] == 1) return 0;
+    }
+    return 1;
+}
+3、深搜回溯
+//深搜遍历
+var dfs = function(e,n){
+    //遍历当前行的每一列
+    for(let i = 0;i < n; i++){
+        //判断能否摆放
+        if(temp[e][i] == 0 && judge(e,i,n)){
+            //标记当前位置已摆放
+            temp[e][i] = 1;
+            //已经摆置n个皇后
+            if(e == n-1){
+                var ans = [];
+                for(let i1 = 0; i1 < n; i1++){
+                    var a = "";
+                    for(let i2 = 0; i2 < n; i2++){
+                        //格式化输出
+                        if(temp[i1][i2] == 0) a += ".";
+                        else a += "Q";
+                    }
+                    ans.push(a);
+                }
+                //将当前结果放进列表
+                res.push(ans);
+            }else{
+                //没够n个，继续往下遍历
+                dfs(e+1,n);
+            }
+        }
+        //回溯，取消标记
+        temp[e][i] = 0;
+    }
+}
+ dfs(0,n);
+ 
+ 
+攻击者可以通过注入恶意脚本获取用户的 Cookie 信息。通常 Cookie 中都包含了用户的登录凭证信息，攻击者在获取到 Cookie 之后，则可以发起 Cookie 劫持攻击。所以，严格来说，HttpOnly 并非阻止 XSS 攻击，而是能阻止 XSS 攻击后的 Cookie 劫持攻击。
+
+XSS 防御中，输入检查一般是检查用户输入的数据中是否包含 <，> 等特殊字符，如果存在，则对特殊字符进行过滤或编码，这种方式也称为 XSS Filter
+验证码被认为是对抗 CSRF 攻击最简洁而有效的防御方法。
+根据 HTTP 协议，在 HTTP 头中有一个字段叫 Referer，它记录了该 HTTP 请求的来源地址。通过 Referer Check，可以检查请求是否来自合法的”源”。
+
+可以在 HTTP 请求中以参数的形式加入一个随机产生的 token，并在服务器端建立一个拦截器来验证这个 token，如果请求中没有 token 或者 token 内容不正确，则认为可能是 CSRF 攻击而拒绝该请求。
+1.防御XSS攻击
+
+HttpOnly 防止劫取 Cookie
+
+用户的输入检查
+
+
+2.防御CSRF攻击
+
+  验证码
+
+request Header   Referer Check   Token 验证
+
