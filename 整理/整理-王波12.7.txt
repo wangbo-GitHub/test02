@@ -527,3 +527,49 @@ HttpOnly 防止劫取 Cookie
 
 request Header   Referer Check   Token 验证
 
+atob() 方法用于解码使用 base-64 编码的字符串。
+
+base-64 编码使用方法是 btoa() 。
+
+Blob，Binary Large Object的缩写，代表二进制类型的大对象
+
+this.$axios
+  .post(url接口地址, params请求参数, {
+    headers: {
+      token: token
+    },
+    responseType: "arraybuffer"
+  })
+  .then((file) => {
+    let content = file.data;
+    // 组装a标签
+    let elink = document.createElement("a");
+    // 设置下载文件名
+    elink.download = "附件.zip";
+    elink.style.display = "none";
+    let blob = new Blob([content], {type: "application/zip"})
+    elink.href = URL.createObjectURL(blob);
+    document.body.appendChild(elink);
+    elink.click();
+    document.body.removeChild(elink);
+  })
+  
+  注意：responseType应设置为：'arraybuffer'，这样返回的文件流才会是二进制的，才能使用new Blob得到正确的文件
+
+  
+  onreadystatechange	存储函数（或函数名），每当readyState属性改变时，就会调用该函数。
+readyState	
+存有 XMLHttpRequest 的状态。从 0 到 4 发生变化。    客户端 ---xml 对象----服务器
+
+0: 请求未初始化
+
+1: 服务器连接已建立
+
+2: 请求已接收
+
+3: 请求处理中
+
+4: 请求已完成，且响应已就绪
+
+status	200: "OK"
+404: 未找到页面
