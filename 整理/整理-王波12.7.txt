@@ -524,8 +524,7 @@ HttpOnly 防止劫取 Cookie
 2.防御CSRF攻击
 
   验证码
-
-request Header   Referer Check   Token 验证
+  request Header   Referer Check   Token 验证
 
 atob() 方法用于解码使用 base-64 编码的字符串。
 
@@ -564,12 +563,158 @@ readyState
 0: 请求未初始化
 
 1: 服务器连接已建立
+//
+有两个字符串str和str2，求出两个字符串中最长公共子串长度。
 
-2: 请求已接收
+比如：str=acbcbcef，str2=abcbced，则str和str2的最长公共子串为bcbce，最长公共子串长度为5。
 
-3: 请求处理中
+算法思路：
+1、把两个字符串分别以行和列组成一个二维矩阵。
 
-4: 请求已完成，且响应已就绪
+2、比较二维矩阵中每个点对应行列字符中否相等，相等的话值设置为1，否则设置为0。
 
-status	200: "OK"
-404: 未找到页面
+3、通过查找出值为1的最长对角线就能找到最长公共子串。
+request Header   Referer Check   Token 验证
+
+public class LCS_1 {
+    public static void main(String[] args) {
+        LCS_1 lcs = new LCS_1();
+        String str = lcs.getLSC("acbcbcef","abcbced");
+        System.out.println(str);
+    }
+
+    private String getLSC(String A, String B) {
+        int[][] dp = new int[B.length()][A.length()];
+        int end_index = 0;
+        int maxLength = 0;
+        for(int i = 0; i < A.length(); i++) {
+            for(int j = 0; j < B.length(); j++) {
+                if(B.charAt(j) == A.charAt(i)) {
+                    if(i == 0 || j == 0) {
+                        dp[i][j] = 1;
+                    } else {
+                        dp[i][j] = dp[i - 1][j - 1] + 1;
+                    }
+
+                    if(dp[i][j] > maxLength) {
+                        maxLength = dp[i][j];
+                        end_index = j;
+                    }
+                }
+            }
+        }
+        System.out.println("maxLength = " + maxLength);
+        System.out.println("end_index = " + end_index);
+        end_index += 1;
+        return B.substring(end_index - maxLength,end_index);
+    }
+}
+
+用动态规划的方法
+使得word1[0]-word1[i]与word2[0]-word2[j]匹配的情况：
+word1[0]-word1[i-1]与word2[0]-word2[j-1]已经匹配且word1[i] == word2[j]
+word1[0]-word1[i-1]与word2[0]-word2[j-1]已经匹配且word1[i] != word2[j]
+word1[0]-word1[i-1]与word2[0]-word2[j]已经匹配
+word1[0]-word1[i]与word2[0]-word2[j-1]已经匹配
+对于以上几种情况：
+
+不用操作，dp[i][j] = dp[i-1][j-1]
+将word1[i]替换成word2[j] ，多一步操作，dp[i][j] = dp[i-1][j-1] + 1
+将word1[i]删除，多一步操作，dp[i][j] = dp[i-1][j] + 1
+插入word2[j]，多一步操作，dp[i][j] = dp[i][j-1] + 1
+
+
+     int m = word1.length();
+        int n = word2.length();
+        
+        int dp[][] = new int[m + 1][n + 1];
+        //""经过0次变换成为""
+        dp[0][0] = 0;
+        
+        //base case
+        //1.dp的第一列初始化：表示word1经过多少次删除操作成为空串""
+        for(int i = 1; i <= m; i++) {
+            dp[i][0] = i; 
+        }
+        
+        //1.dp的第一列初始化：表示空串""经过多少次添加操作成为word2
+        for(int j = 1; j <= n; j++) {
+            dp[0][j] = j; 
+        }
+                
+
+        //  自底向上求解
+        for(int i = 1; i <= m; i++) {
+            for(int j = 1; j <= n; j++) {
+                if(word1.charAt(i - 1) == word2.charAt(j - 1)) {
+                    dp[i][j] = dp[i - 1][j - 1];
+                } else {
+                    //dp[i - 1][j] + 1 表示删除word1中i处的字符（因为该字符不在word2的j中），操作次数+1
+                    //dp[i][j - 1] + 1 表示word1在i之后添加一个字符匹配word2的j处字符，操作次数+1
+                    //dp[i - 1][j - 1] + 1 表示将word1的i处字符替换为word2的j处字符，操作次数+1
+                    dp[i][j] = min(dp[i - 1][j] + 1, dp[i][j - 1] + 1, dp[i - 1][j - 1] + 1);
+                }
+            }
+        }
+        
+        // 储存着整个 word1 和 word2 的最小编辑距离
+        return dp[m][n];
+    }
+	
+	const createMarkup = () => {
+    return 123;
+}
+<div dangerouslySetInnerHTML={createMarkup}></div>
+/*defaultValue  Babel react编译器
+打包器  webpack/Browserify
+$ browserify main.js > bundle.js
+main.js 需要的所有其它文件都会被编译进 bundle.js 中，包括很多层 require() 的情况也会一起被递归式的编译过来。
+编译好的 js可以直接拿到浏览器使用
+<script src="bundle.js"></script>
+npm yarn 包管理器
+CDN代表内容传送网络。CDN从全球各地的服务器网络提供缓存的静态内容。
+jsx 被编译为React.creatElement()
+element最小的分子
+组件
+function Compons (props) {
+    return <div>{props}</div>
+}
+es6: 
+class Compons extends React.Component { 
+    render () {
+        return <div>{this.props}</div>
+    }
+}
+
+props父-子 只是可读的；若响应式则使用state
+
+props.children获取子节点  结合React.Children使用
+
+es6 import React form 'react' es5: var React = inquire('react');
+React.Component
+React.PureComponent // 用于避免重复渲染（执行render函数），提高效率  但至少浅层比较
+isValidElement()
+React.cloneElement(
+  element,  [props],  [...children])
+
+创建一个实例的并挂在到DOM上
+constructor()
+componentWillMount()
+render()
+componentDidMount()
+更新
+componentWillReceiveProps()
+componentWillReceiveProps()在挂载组件接收新道具之前被调用。如果您需要在响应更新状态托变化（例如，复位），你可以比较this.props和nextProps和执行使用状态转换this.setState()在此方法
+shouldComponentUpdate()
+componentWillUpdate()
+render()
+componentDidUpdate()
+卸载--组件销毁
+componentWillUnmount()
+componentDidCatch()
+
+setState();
+forceUpdate();
+defaultProps
+
+*/
