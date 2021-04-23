@@ -718,3 +718,58 @@ forceUpdate();
 defaultProps
 
 */
+
+      let $iframe = $('<iframe id="down-file-iframe" name="down-file-iframe" style="display: none;" />');
+      let $form = $('<form target=""/>');
+      $form.attr('method', 'post');
+      $form.attr('action', url);
+
+      let $input = $('<input />');
+      $input.attr('type', 'hidden');
+      $input.attr('name', key);
+      $input.attr('value', JSON.stringify(data));
+
+      $form.append($input);
+      $iframe.append($form);
+      $(document.body).append($iframe);
+      $form[0].submit();
+      $iframe.remove();
+      <div style="display:none">
+        <from action="" id="export"/>
+        <iframe name="export"/>
+      </div>
+      let id = document.getElementById('export');
+      let url = '123';
+      id.action = url;
+      id.submit();
+
+	  alt 属性是一个必需的属性,它规定在图像无法显示时的替代文本
+
+let date = new Date();
+console.log(1, new Date() - date);
+setTimeout(() => {
+  console.log(3, new Date() - date);
+}, 500);
+Promise.resolve().then(console.log(3, new Date() - date));
+while(new Date() - date < 1000) {}
+console.log(4, new Date() - date);
+输出值
+1 0
+VM111:6 3 1
+VM111:8 4 1000
+undefined
+VM111:4 3 1002
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
