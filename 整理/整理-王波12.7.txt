@@ -860,6 +860,8 @@ SPA： Single Page Application（单页应用程序）
         font-weight: 600px;
         border-radius: 50%;
         border: 15px solid transparent;
+        line-height: normal;
+        letter-spacing: normal;
         /* border: 1px solid red; */
         /* box-shadow: 10px 10px 10px blue; */
         /* border-image: url(./dog.jpg) 30 30 stretch; */
@@ -942,21 +944,93 @@ SPA： Single Page Application（单页应用程序）
           top: 0px;
         }
       }
+      .main {
+        display: flex;
+        /* justify-content: space-between; */
+        /* flex-wrap: nowrap; */
+        /* flex-direction: column; */
+        align-items: center;
+        /* align-content: flex-end; */
+      }
+      .left {
+        height: 200px;
+        background-color: red;
+        width: 33.3%;
+      }
+      .center1 {
+        height: 200px;
+        background-color: yellow;
+        width: 10%;
+      }
+      .center2 {
+        height: 200px;
+        background-color: blue;
+        width: 13.3%;
+      }
+      .right {
+        height: 200px;
+        background-color: green;
+        width: 13.3%;
+      }
+      .ani {
+        width: 480px;
+        height: 320px;
+        margin: 50px auto;
+        overflow: hidden;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 1);
+        background-size: cover;
+        background-position: center;
+        -webkit-animation-name: 'loops';
+        -webkit-animation-duration: 20s;
+        -webkit-animation-iteration-count: infinite;
+      }
+      @-webkit-keyframes loops {
+        0% {
+          background: url(dog.jpg) no-repeat;
+        }
+        25% {
+          background: url(http://b.hiphotos.baidu.com/image/w%3D400/sign=edee1572e9f81a4c2632edc9e72b6029/30adcbef76094b364d72bceba1cc7cd98c109dd0.jpg)
+            no-repeat;
+        }
+        50% {
+          background: url(http://b.hiphotos.baidu.com/image/w%3D400/sign=937dace2552c11dfded1be2353266255/d8f9d72a6059252d258e7605369b033b5bb5b912.jpg)
+            no-repeat;
+        }
+        75% {
+          background: url(http://g.hiphotos.baidu.com/image/w%3D400/sign=7d37500b8544ebf86d71653fe9f9d736/0df431adcbef76095d61f0972cdda3cc7cd99e4b.jpg)
+            no-repeat;
+        }
+        100% {
+          background: url(http://c.hiphotos.baidu.com/image/w%3D400/sign=cfb239ceb0fb43161a1f7b7a10a54642/3b87e950352ac65ce2e73f76f9f2b21192138ad1.jpg)
+            no-repeat;
+        }
+      }
+      #container     /**<img>的容器设置如下**/ {
+        display: table-cell;
+        text-align: center;
+        vertical-align: middle;
+      }
     </style>
   </head>
   <body>
-    <div>
-      <div class="div1 divs">this is a test 123</div>
-      <div class="div2 divs">this is a test11111</div>
+    <div class="main">
+      <!-- <div class="div1 divs">this is a test 123</div> -->
+      <!-- <div class="div2 divs">this is a test11111</div> -->
       <!-- <img src="./dog.jpg" alt="" /> -->
-      <div class="angle"></div>
-      <div class="pics">
+      <!-- <div class="angle"></div> -->
+      <!-- <div class="pics">
         <h1>123</h1>
         <h1>345</h1>
-      </div>
+      </div> -->
       <!-- <div class="tran"></div> -->
-      <div class="animations">大宝贝</div>
+      <!-- <div class="animations">大宝贝</div> -->
+      <!-- <div class="left"></div>
+      <div class="center1"></div>
+      <div class="center2"></div>
+      <div class="right"></div>
+      <div class="ani"></div> -->
     </div>
+    <img id="container" src="./dog.jpg" alt="" />
   </body>
 </html>
 	  
