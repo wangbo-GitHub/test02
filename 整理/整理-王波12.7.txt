@@ -350,7 +350,7 @@ const solveSudoku = (board) => {
 this.$forceUpdate();强制调用render渲染函数，渲染数据
 
 事件循环机制：
-JS引擎线程会维护一个执行栈，同步代码会依次加入到执行栈中依次执行并出栈。
+JS引擎线程会维护一个执行栈，同步代码会依次加入到执行栈中依次执行并出栈。//注意：每次只有一个任务在栈中
 
 JS引擎线程遇到异步函数，会将异步函数交给相应的Webapi，而继续执行后面的任务。
 
@@ -759,14 +759,206 @@ VM111:6 3 1
 VM111:8 4 1000
 undefined
 VM111:4 3 1002
+
+图片懒加载
+  <img src="Go.png" data-src="./photo.png" alt="">
+  <img src="Go.png" data-src="./photo.png" alt="">
+  <script>
+    let num = document.getElementsByTagName('img').length;
+    let img = document.getElementsByTagName("img");
+    let n = 0; //存储图片加载到的位置，避免每次都从第一张图片开始遍历
+
+    lazyload(); //页面载入完毕加载可是区域内的图片
+
+    // window.onscroll = lazyload;
+    window.addEventListener('scroll', lazyload);
+    function lazyload() { //监听页面滚动事件
+      let seeHeight = document.documentElement.clientHeight; //可见区域高度
+      let scrollTop = document.documentElement.scrollTop || document.body.scrollTop; //滚动条距离顶部高度
+      for (let i = n; i < num; i++) {
+        if (img[i].offsetTop < seeHeight + scrollTop) {
+          if (img[i].getAttribute("src") == "Go.png") {
+            img[i].src = img[i].getAttribute("data-src");
+          }
+          n = i + 1;
+        }
+      }
+    }
+事件案例冒泡
+	<body>
+  <ul id="uld">
+    <li>1</li>
+    <li>2</li>
+    <li>3</li>
+  </ul>
+  <script>
+    // (function() {
+    //   let id = document.querySelectorAll('li');
+    //   for (let i of id) {
+    //     i.onclick = showName;
+    //   }
+    //   function showName (e) {
+    //     alert(e.target.innerHTML);
+    //   }
+    // })();
+       (function() {
+      let id = document.getElementById('uld');
+      id.addEventListener('click', showName, true);
+      function showName (e) {
+        let x = e.target;
+        x.nodeName.toLowerCase() === 'li' ? alert(e.target.innerHTML) : '';
+      }
+    })();
 	  
 	  
+其实这个问题归结到最后，也可以抽象为一个问题：为什么抽象出来的 DOM 树只能有一个根？
+
+从查找和遍历的角度来说，如果有多个根，那么我们的查找和遍历的效率会很低。
+如果一个树有多个根，说明可以优化，肯定会有一个节点是可以访问到所有的节点，那这个节点就会成为新的根节点。
+再从 Vue 本身来说，如果说一个组件有多个入口多个根，那不就意味着你的组件还可以进一步拆分成多个组件，进一步组件化，降低代码之间的耦合程度。
 	  
-	  
-	  
-	  
-	  
-	  
+SPA： Single Page Application（单页应用程序）
+概念：就是只有一个Web页面的应用，是加载单个HTML页面，并在用户与应用程序交互时动态更新该页面的Web应用程序。
+与传统多页面程序的区别：
+????传统多页面程序：每次请求服务器返回的都是一个完整的页面
+????单页应用程序：只有第一次会加载页面, 以后的每次请求, 仅仅是获取必要的数据.然后, 由页面中js解析获取的数据, 展示在页面中
+优势：
+????1 减少了请求体积，加快页面响应速度，降低了对服务器的压力
+????2 更好的用户体验，让用户在web app感受native app的流畅
+缺点：
+? ? 因为技术使用了ajax，导致页面不利于SEO，但是可以通过其他技术去规避
+? （SEO原则：搜索引擎的蜘蛛只识别href的一般超链接，而不识别JavaScript代码，遇到一般超链接就会爬进去，遇到JavaScript不会爬进去。即，搜索引擎抓不到AJAX动态加载的内容。）
+? ? ? ? 1）服务端渲染? 2）页面静态化（专门为爬虫准备的）
+主要技术点：
+????1 ajax
+????2 锚点的使用（window.location.hash #）
+????3 hashchange 事件
+实现思路：
+
+????监听锚点值变化的事件，根据不同的锚点值，请求相应的数据
+
+????????1 锚点（#）原本用作页面内部进行跳转，定位并展示相应的内容
+
+????????2 SPA中，锚点被用作请求不同资源的标识，请求数据并展示内容
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .div1 {
+        display: inline-block;
+        width: 100px;
+        height: 100px;
+        background-color: #fdfd04;
+      }
+      .divs {
+        /* background-color: red; */
+        font-size: 20px;
+        font-weight: 600px;
+        border-radius: 50%;
+        border: 15px solid transparent;
+        /* border: 1px solid red; */
+        /* box-shadow: 10px 10px 10px blue; */
+        /* border-image: url(./dog.jpg) 30 30 stretch; */
+      }
+      .div2 {
+        display: inline-block;
+        width: 100px;
+        height: 100px;
+        background-color: #fdfd04;
+      }
+      .angle {
+        width: 0px;
+        height: 0px;
+        border: 100px solid;
+        border-left-color: transparent;
+        border-right-color: transparent;
+        border-top-color: transparent;
+      }
+      .pics {
+        height: 150px;
+        width: 200px;
+        /* background-image: url(./dog.jpg), url(./photo.png); */
+        background-position: left top, right bottom;
+        background-repeat: no-repeat, repeat;
+        /* padding: 100px; */
+        /* background-image: linear-gradient(to right, red 80%, blue); */
+        background-image: radial-gradient(red, blue, green);
+        /* transform: rotate(90deg); translate(x,y) scale(2,3) skew(deg1,deg2)*/
+        transform: skew(30deg, 20deg);
+        /* gradients */
+      }
+      .tran {
+        width: 100px;
+        height: 100px;
+        background-color: red;
+        transition: width 2s, height 2s, transform 2s;
+        /* transition过渡 */
+      }
+      .tran :hover {
+        width: 500px;
+        height: 500px;
+        transform: rotate(60deg);
+      }
+
+      div .animations {
+        position: relative;
+        width: 200px;
+        margin-left: 600px;
+        height: 100px;
+        background: red;
+        animation: myfirst 5s;
+        font-weight: 700;
+        text-align: bottom;
+      }
+
+      @keyframes myfirst {
+        0% {
+          background: red;
+          left: 0px;
+          top: 0px;
+        }
+        25% {
+          background: yellow;
+          left: 200px;
+          top: 0px;
+        }
+        50% {
+          background: blue;
+          left: 200px;
+          top: 200px;
+        }
+        75% {
+          background: green;
+          left: 0px;
+          top: 200px;
+        }
+        100% {
+          background: red;
+          left: 0px;
+          top: 0px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      <div class="div1 divs">this is a test 123</div>
+      <div class="div2 divs">this is a test11111</div>
+      <!-- <img src="./dog.jpg" alt="" /> -->
+      <div class="angle"></div>
+      <div class="pics">
+        <h1>123</h1>
+        <h1>345</h1>
+      </div>
+      <!-- <div class="tran"></div> -->
+      <div class="animations">大宝贝</div>
+    </div>
+  </body>
+</html>
 	  
 	  
 	  
