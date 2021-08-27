@@ -257,7 +257,7 @@ function observer(data) {
 }
 function defs (data, key, value) {
   observer(data);
-  let deep = new Deep();
+  let deep = new Dep();
   Object.definedProperity(data, key, {
     get: function() {
       Deep.target ? deep.addSub(Deep.target) : '';
@@ -272,7 +272,7 @@ function defs (data, key, value) {
   });
 }
 //dep订阅容器
-function Deep() {
+function Dep() {
   this.subs = [];
 }
 Deep.prototype = {
@@ -1034,7 +1034,14 @@ SPA： Single Page Application（单页应用程序）
   </body>
 </html>
 
-手写一个promise
+手写一个promise 
+
+function Promise(exe) {
+	exe();
+}
+Promise.prototype.then = () {
+}
+
 class Promise {
   constructor(executor) {
     this.state = 'pending'; //初始状态
@@ -1123,4 +1130,73 @@ promise.then(
       })();
 	  
 	  
-	  
+//
+    let Person = {
+      name: 'allin',
+      age: 18,
+      address: [{
+          home: 'home',
+          office: 'office',
+      }],
+      sclools: ['x','z'],
+    };
+    let child = {};
+    function set(Person, child) {
+      for (let i in Person) {
+        if (typeof Person[i] === 'object') { //递归实现
+          child[i] = Person[i].constructor === Array ? [] : {};
+          set(Person[i], child[i]);
+        } else {
+          child[i] = Person[i];//非子对象or数组的为deepclone
+        }
+      }
+    }
+    child.address.home = 'wangbo'
+	
+	************************
+Programmer.prototype = Object.create(Person.prototype); //建立继承关系
+Programmer.prototype.constructor = Programmer;  // 修改constructor的指向
+
+
+Programmer.prototype.work = function(){
+    console.log('i am working code in '+ this.language);
+    Person.prototype.eat.apply(this, arguments); // 调用父类上的方法
+}
+
+
+
+对象没有布局Iterator接口，无法使用for of 遍历。
+
+如下可以实现
+let obj = {
+    id: '123',
+    name: '张三',
+    age: 18,
+    gender: '男',
+    hobbie: '睡觉'
+}
+
+obj[Symbol.iterator] = function () {
+    let keyArr = Object.keys(obj)
+    let index = 0
+    return {
+        next() {
+            return index < keyArr.length ? {
+                value: {
+                    key: keyArr[index],
+                    val: obj[keyArr[index++]]
+                }
+            } : {
+                done: true
+            }
+        }
+    }
+}
+
+for (let key of obj) {
+  console.log(key)
+}
+
+对于图片的加载，特别适合用 race 方法来解决，将图片请求和超时判断放到一起，用 race 来实现图片的超时判断
+
+
