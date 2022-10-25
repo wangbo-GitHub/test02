@@ -1,0 +1,43 @@
+github-token: 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
+
+1. git pull push失败
+密码凭证到期，使用个人访问令牌，密码修改为token;
+针对未启用双因素身份验证的客户仍然可以使用用户名和密码进行git操作、身份验证
+对称加密：收发双发使用同一秘钥，秘钥加密 秘钥解密；加解密速度快，适合数据量大的情况 缺点是安全性不高，容易泄露
+非对称加密：公钥私钥，用公钥加密 然后私钥解密
+jsencrypt加密 rsa非对称加密
+认证方式https以及ssh
+ssh协议为应用层安全协议，适用于远程登录、指令执行、通信等，配置后不需要每次都输入用户名密码
+
+https使用的是对称加密以及非对称加密组合
+1. c请求 s返回公钥
+2. c验证证书（根据证书内容去浏览器寻找根证书。若未找到根证书，代表此机构是不受信任的，此时浏览器会警告用户。），生成秘钥 利用公钥加密秘钥发s 
+3 s收到用私钥解密出秘钥，然后对明文进行秘钥加密，然后发c
+4 c收到后用秘钥解密得到，此后使用此密码加解密即可
+ps: 在建立链接过程中被拦截，但是由于中间人无私钥也无法解密
+
+git 工作区 暂存区 本地仓库 远程仓库
+
+2. canvas相关 canvas裁剪图片工具 https://juejin.cn/post/6844904081190813710
+    var canvas = document.getElementById('canvas');
+      const ctx = canvas.getContext('2d');
+      // 实现拖拽时触发事件
+      canvas.addEventListener('mousedown', e => {
+        vm.dragging = true;
+        vm.startX = e.offsetX;
+        vm.startY = e.offsetY;
+      });
+      canvas.addEventListener('mousemove', e => {
+        if (!vm.dragging) {
+          return;
+        }
+        // 计算临时裁剪框的宽高
+        let tempWidth = e.offsetX - vm.startX;
+        let tempHeight = e.offsetY - vm.startY;
+        // 调用绘制裁剪框的方法
+  	    vm.drawTrim(vm.startX, vm.startY, tempWidth, tempHeight, ctx, canvas);
+      });
+      canvas.addEventListener('mouseup', e => {
+        vm.dragging = false;
+      });
+
